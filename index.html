@@ -1,176 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HaulNationAI</title>
-  <meta name="description" content="Smart Dispatch • Real-time Logistics • AI Powered" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HaulNationAI - Smart Logistics</title>
   <style>
-    :root{
-      --brand-blue:#1976d2;
-      --brand-teal:#16a085;
-      --brand-mint:#42b883;
-      --brand-brown:#7a3e12;
-      --bg:#f5f7fb;
-      --ink:#0f172a;
-      --muted:#64748b;
-      --card:#ffffff;
-      --line:rgba(15,23,42,.08);
-      --shadow:0 10px 30px rgba(2,6,23,.08);
-      --radius:18px;
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #1e90ff, #00bfff);
+      margin: 0;
+      padding: 0;
+      color: white;
+      text-align: center;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Apple Color Emoji,Segoe UI Emoji;color:var(--ink);background:var(--bg)}
-
-    header{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:clamp(28px,6vw,56px) 20px}
-    .head{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
-    .logo{font-size:clamp(36px,5.6vw,64px);font-weight:800;letter-spacing:.3px;margin:0;display:flex;align-items:center;gap:14px;line-height:1.15}
-    .logo .emoji{font-size:clamp(26px,4.6vw,40px);filter:drop-shadow(0 8px 14px rgba(0,0,0,.18))}
-    .strap{grid-column:1 / -1;font-weight:600;opacity:.95;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
-    .chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 12px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-
-    .wrap{max-width:1100px;margin:0 auto;padding:22px}
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);padding:clamp(18px,2.6vw,28px)}
-    .card h2{font-size:clamp(28px,4.2vw,40px);line-height:1.2;margin:0 0 10px 0;letter-spacing:.2px}
-    .lead{font-size:clamp(16px,2.6vw,20px);color:var(--muted)}
-
-    footer{margin-top:28px;background:var(--brand-brown);color:#fff;padding:16px 20px;text-align:center;letter-spacing:.2px;font-weight:600}
-
-    .tg-bubble{position:fixed;right:18px;bottom:22px;width:68px;height:68px;border-radius:50%;background:conic-gradient(from 270deg,#ffa54a 0 25%,#1f9d55 0 75%,#ffa54a 0 100%);box-shadow:0 18px 40px rgba(2,6,23,.18);border:3px solid #fff;display:grid;place-items:center;cursor:pointer;z-index:30}
-    .tg-bubble .dot{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 10px rgba(2,6,23,.15) inset;position:relative}
-    .tg-bubble .dot:before,.tg-bubble .dot:after{content:"";position:absolute;bottom:-3px;left:8px;width:0;height:0;border:7px solid transparent;border-top-color:#fff;transform:rotate(25deg)}
-
-    .tg-win{position:fixed;right:16px;bottom:100px;width:min(690px,calc(100vw - 32px));max-height:min(70vh,720px);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px rgba(2,6,23,.24);overflow:hidden;display:none;z-index:40}
-    .tg-head{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-    .tg-title{font-weight:800;letter-spacing:.2px;display:flex;gap:10px;align-items:center}
-    .tg-sub{font-weight:600;opacity:.85;font-size:14px}
-    .tg-close{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
-
-    .tg-body{padding:14px;background:#f8fafc;display:grid;grid-template-rows:1fr auto;gap:10px;height:420px}
-    .tg-stream{overflow:auto;display:flex;flex-direction:column;gap:10px}
-    .bubble{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);max-width:90%}
-    .bot{background:#eefbf0;border-color:#cdebd6}
-    .me{margin-left:auto;background:#fff}
-    .tg-input{display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}
-    .tg-input input{flex:1;font:inherit;border:0;outline:0;padding:10px}
-    .btn{background:var(--brand-blue);color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer}
-    .btn:active{transform:translateY(1px)}
-    @media (max-width:520px){.tg-win{bottom:94px}.strap{font-size:14px}}
+    header {
+      padding: 20px;
+      background: rgba(0,0,0,0.5);
+    }
+    h1 { margin: 0; }
+    #calculator {
+      margin: 30px auto;
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: left;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #1e90ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #result { margin-top: 15px; font-weight: bold; }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="head">
-      <h1 class="logo"><span class="emoji">🚚</span> HaulNationAI</h1>
-      <div class="strap">
-        <span class="chip">Smart Dispatch</span>
-        <span class="chip">Real-time Logistics</span>
-        <span class="chip">AI Powered</span>
-      </div>
-    </div>
+    <h1>🚚 HaulNationAI</h1>
+    <p>Smart Dispatch • Real-time Mileage Calculator</p>
   </header>
 
-  <main class="wrap">
-    <section class="card">
-      <h2>Welcome</h2>
-      <p class="lead">Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!</p>
-    </section>
-  </main>
+  <div id="calculator">
+    <h2>Mileage & Price Calculator</h2>
+    <label>Pickup Location:</label>
+    <input type="text" id="origin" placeholder="e.g. Grand Rapids, MI">
 
-  <footer>© 2025 HaulNationAI</footer>
+    <label>Drop-off Location:</label>
+    <input type="text" id="destination" placeholder="e.g. New York, NY">
 
-  <button class="tg-bubble" id="tgBubble" aria-label="Open chat"><span class="dot"></span></button>
+    <label>Weight (tons):</label>
+    <input type="number" id="weight" placeholder="e.g. 2">
 
-  <aside class="tg-win" id="tgWin" role="dialog" aria-label="HaulNationAI chat">
-    <div class="tg-head">
-      <div>
-        <div class="tg-title">HaulNationAI</div>
-        <div class="tg-sub">Smart Dispatch • Live Logistics</div>
-      </div>
-      <button class="tg-close" id="tgClose">Close</button>
-    </div>
-    <div class="tg-body">
-      <div class="tg-stream" id="tgStream">
-        <div class="bubble bot">Hey there! I’m your logistics helper. Ask about loads, lanes, rates, or tracking. 🚚📦</div>
-        <div class="bubble bot">Online and ready to help with dispatching, quotes, and tracking.</div>
-      </div>
-      <form class="tg-input" id="tgForm">
-        <input id="tgInput" type="text" placeholder="Type a message and press Enter…" autocomplete="off" />
-        <button class="btn" type="submit">Send</button>
-      </form>
-    </div>
-  </aside>
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="result"></div>
+  </div>
 
   <script>
-    // Skills registry
-    window.TG_SKILLS = window.TG_SKILLS || [];
+    async function calculate() {
+      const origin = document.getElementById('origin').value;
+      const destination = document.getElementById('destination').value;
+      const weight = document.getElementById('weight').value;
+      const resultDiv = document.getElementById('result');
 
-    // Async-aware bot runner
-    const TeamGreen = {
-      async respond(text){
-        const t = (text || "").trim();
-        for (const sk of window.TG_SKILLS){
-          try{
-            if (sk && typeof sk.canHandle === "function" && sk.canHandle(t)){
-              const out = sk.handle && sk.handle(t);
-              return (out && typeof out.then === "function") ? await out : out;
-            }
-          }catch(e){ console.warn("skill error:", sk?.name, e); }
-        }
-        return "🤖 Sorry, I don’t know how to help with that yet. Try: <b>rate</b>, <b>tracking</b>, <b>dispatch</b>, <b>documents</b>, <b>coverage</b>, or <b>contact</b>.";
+      if (!origin || !destination) {
+        resultDiv.innerHTML = "⚠️ Please enter both pickup and drop-off.";
+        return;
       }
-    };
 
-    // Chat UI
-    (function(){
-      const bubble = document.getElementById("tgBubble");
-      const win    = document.getElementById("tgWin");
-      const close  = document.getElementById("tgClose");
-      const form   = document.getElementById("tgForm");
-      const input  = document.getElementById("tgInput");
-      const feed   = document.getElementById("tgStream");
+      const apiKey = eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImY3YWMxMGE5Y2QzMzRhNmY5ZTZjYmI2ZDVjNDdjYjc5IiwiaCI6Im11cm11cjY0In0=; // <--- paste your key here
 
-      const add = (msg, who="bot")=>{
-        const div = document.createElement("div");
-        div.className = "bubble " + (who==="me" ? "me" : "bot");
-        div.innerHTML = msg;
-        feed.appendChild(div);
-        feed.scrollTop = feed.scrollHeight;
-        return div;
-      };
+      try {
+        // Use OpenRouteService Geocode to get coordinates
+        const geocode = async (place) => {
+          let resp = await fetch(`https://api.openrouteservice.org/geocode/search?api_key=${apiKey}&text=${encodeURIComponent(place)}`);
+          let data = await resp.json();
+          return data.features[0].geometry.coordinates;
+        };
 
-      bubble.addEventListener("click", ()=>{ win.style.display="block"; input.focus(); });
-      close.addEventListener("click", ()=> win.style.display="none");
+        const [startLng, startLat] = await geocode(origin);
+        const [endLng, endLat] = await geocode(destination);
 
-      setTimeout(()=>add("Got it. Want a rate, tracking update, or dispatch setup?"), 400);
+        // Get route distance
+        let routeResp = await fetch("https://api.openrouteservice.org/v2/directions/driving-car", {
+          method: "POST",
+          headers: {
+            "Authorization": apiKey,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            coordinates: [[startLng, startLat],[endLng, endLat]]
+          })
+        });
 
-      form.addEventListener("submit", async (e)=>{
-        e.preventDefault();
-        const q = input.value.trim();
-        if(!q) return;
-        add(q, "me");
-        input.value = "";
+        let routeData = await routeResp.json();
+        let distanceMeters = routeData.routes[0].summary.distance;
+        let distanceMiles = (distanceMeters / 1609.34).toFixed(1);
 
-        // typing bubble
-        const thinking = add("… calculating …");
-        const reply = await TeamGreen.respond(q);
-        thinking.innerHTML = reply || "I’m not sure yet—try saying <b>rate</b> with origin and destination.";
-      });
-    })();
+        // Simple pricing formula
+        let baseRate = 2.5; // $2.50 per mile
+        let weightFactor = weight ? parseFloat(weight) : 1;
+        let price = (distanceMiles * baseRate * weightFactor).toFixed(2);
+
+        resultDiv.innerHTML = `📍 Distance: ${distanceMiles} miles <br> 💵 Estimated Price: $${price}`;
+      } catch (err) {
+        console.error(err);
+        resultDiv.innerHTML = "❌ Error: Could not calculate route.";
+      }
+    }
   </script>
 
-  <!-- ===== Load Team-green skills (now async-capable) ===== -->
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/config.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/tracking.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/dispatch.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/documents.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/coverage.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/contacts.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/lead.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
 </body>
   </html>
