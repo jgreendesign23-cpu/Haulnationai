@@ -1,111 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>HaulNationAI</title>
-<style>
-  :root{
-    --blue:#1e90ff;--green:#2e8b57;--orange:#ff8c00;--brown:#8b4513;
-    --bg:#f6f7f8;--ink:#222;--panel:#fff;--muted:#e9eef3;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-  header{padding:32px 16px;color:#fff;text-align:center;
-    background:linear-gradient(110deg,var(--blue),var(--green))}
-  header h1{margin:0 0 8px}
-  header p{margin:0;opacity:.9}
-  main{max-width:920px;margin:24px auto;padding:0 16px}
-  .card{background:var(--panel);border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.08);padding:20px}
-  footer{margin:40px 0 80px;text-align:center;color:#fff;background:var(--brown);padding:16px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HaulNationAI</title>
 
-  /* chat head */
-  #chatHead{position:fixed;right:20px;bottom:20px;width:64px;height:64px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1000;
-    background:conic-gradient(from 220deg,var(--green),var(--orange));color:#fff;font-size:28px;
-    box-shadow:0 10px 24px rgba(0,0,0,.25)}
-  /* chat window */
-  #chat{position:fixed;right:20px;bottom:96px;width:360px;max-width:calc(100vw - 32px);
-    display:none;flex-direction:column;background:#fff;border-radius:16px;overflow:hidden;
-    border:2px solid var(--green);box-shadow:0 16px 36px rgba(0,0,0,.2);z-index:1000}
-  #chat header{background:var(--green);color:#fff;padding:10px 14px;font-weight:700}
-  #messages{padding:14px;height:260px;overflow:auto;background:var(--muted)}
-  .row{display:flex;margin:8px 0}
-  .row.user{justify-content:flex-end}
-  .bubble{max-width:80%;padding:10px 12px;border-radius:12px;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.06)}
-  .row.user .bubble{background:#e8f0ff;border:1px solid #c9ddff}
-  .row.bot  .bubble{background:#ecf9f1;border-left:5px solid var(--green)}
-  .input{display:flex;gap:10px;border-top:1px solid #e5e8ec;background:#fff}
-  .input input{flex:1;padding:12px;border:0;outline:none}
-  .input button{background:var(--blue);color:#fff;border:0;border-radius:10px;padding:0 18px;font-weight:700;cursor:pointer}
-  .input small{display:block;color:#666;margin:6px 0 0 6px}
-</style>
+  <style>
+    /* ====== Brand colors ====== */
+    :root{
+      --blue:#226bff;
+      --green:#2e7d32;
+      --orange:#e67e22;
+      --brown:#7a3e16;
+      --ink:#1f2633;
+      --muted:#5b6477;
+      --card:#ffffff;
+      --bg:#f4f7fb;
+    }
+
+    /* ====== Base layout (kept) ====== */
+    html,body{height:100%}
+    body{
+      margin:0; font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink); background:var(--bg);
+    }
+
+    /* Header bar */
+    header{
+      background: linear-gradient(95deg, var(--blue), var(--green));
+      color:#fff; padding:28px 16px;
+      box-shadow:0 8px 28px rgba(0,0,0,.15) inset;
+    }
+    header .shell{
+      max-width:1100px; margin:0 auto;
+      display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    }
+    header h1{ margin:0; font-size:40px; font-weight:800; letter-spacing:.3px }
+    header p{ margin:0; font-weight:600; opacity:.92 }
+    header .tagline{ margin-top:6px; opacity:.95 }
+
+    /* Main card */
+    main{ padding:28px 16px }
+    .card{
+      max-width:1100px; margin:0 auto; background:var(--card); border-radius:18px;
+      box-shadow: 0 10px 36px rgba(16,24,40,.10), 0 2px 6px rgba(16,24,40,.06);
+      padding:26px 22px;
+    }
+    .card h2{ margin:0 0 10px 0; font-size:32px }
+    .card p{ margin:10px 0; color:var(--muted); font-size:18px }
+
+    /* Footer */
+    footer{
+      margin-top:28px; background:var(--brown); color:#fff; text-align:center; padding:14px 10px;
+    }
+
+    /* ====== Floating chat (namespaced .hn-*) ====== */
+    .hn-bubble{
+      position:fixed; right:22px; bottom:24px; width:64px; height:64px; border-radius:50%;
+      background: conic-gradient(var(--green) 0 70%, var(--orange) 70% 100%);
+      box-shadow:0 10px 24px rgba(0,0,0,.2), inset 0 0 0 6px #fff;
+      display:grid; place-items:center; cursor:pointer; border:none;
+      transition: transform .15s ease; z-index:1000;
+    }
+    .hn-bubble:active{ transform: scale(.96); }
+    .hn-bubble svg{ width:28px; height:28px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.2)); }
+
+    .hn-window{
+      position:fixed; right:22px; bottom:98px; width:min(92vw, 380px);
+      background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:16px;
+      box-shadow:0 12px 32px rgba(0,0,0,.18); z-index:1000; overflow:hidden;
+    }
+    .hn-header{
+      padding:14px 16px; font-weight:800; color:#fff;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .hn-header small{ display:block; font-weight:600; opacity:.9 }
+    .hn-close{
+      border:none; background:rgba(255,255,255,.22); color:#fff; padding:6px 10px;
+      border-radius:8px; cursor:pointer;
+    }
+    .hn-messages{ padding:14px; max-height:320px; overflow:auto; background:#f6f8fb; }
+    .hn-row{ display:flex; gap:10px; margin:10px 0; }
+    .hn-row.bot .hn-bubble-msg{ background:#e9f5ec; border-left:6px solid var(--green); }
+    .hn-row.user{ justify-content:flex-end; }
+    .hn-bubble-msg{
+      background:#eef2ff; padding:10px 12px; border-radius:12px; max-width:78%;
+      line-height:1.45; border:1px solid rgba(0,0,0,.08);
+    }
+    .hn-inputbar{ display:flex; gap:10px; padding:12px; background:#fff; }
+    .hn-inputbar input{
+      flex:1; padding:12px; border:1px solid #d9dee8; border-radius:10px; outline:none;
+    }
+    .hn-send{
+      background:var(--blue); color:#fff; border:none; padding:0 18px; border-radius:10px;
+      font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(34,107,255,.25);
+    }
+  </style>
 </head>
 <body>
+
+  <!-- ====== Header (kept) ====== -->
   <header>
-    <h1>🚛 HaulNationAI</h1>
-    <p>Smart Dispatch • Real-time Logistics • AI Powered</p>
+    <div class="shell">
+      <div style="font-size:34px">🚚</div>
+      <div>
+        <h1>HaulNationAI</h1>
+        <p class="tagline">Smart Dispatch • Real-time Logistics • AI Powered</p>
+      </div>
+    </div>
   </header>
 
+  <!-- ====== Main welcome card (kept) ====== -->
   <main>
-    <section class="card">
+    <div class="card">
       <h2>Welcome</h2>
-      <p>Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!</p>
-    </section>
+      <p>
+        Our AI helps you manage logistics smarter, faster, and cheaper.
+        Click the chat bubble to talk to us!
+      </p>
+    </div>
   </main>
 
+  <!-- ====== Footer (kept) ====== -->
   <footer>© 2025 HaulNationAI</footer>
 
-  <!-- Floating chat -->
-  <button id="chatHead" aria-label="Open chat">💬</button>
+  <!-- ====== Floating chat ====== -->
+  <button class="hn-bubble" id="hnBubble" aria-label="Open chat">
+    <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+      <path d="M2 12c0-4.97 4.48-9 10-9s10 4.03 10 9-4.48 9-10 9c-1.14 0-2.24-.17-3.27-.49L4 22l1.57-3.53A8.7 8.7 0 0 1 2 12z"/>
+    </svg>
+  </button>
 
-  <aside id="chat" aria-live="polite" aria-label="HaulNationAI chat">
-    <header>HaulNationAI Chat</header>
-    <div id="messages"></div>
-    <div class="input">
-      <input id="text" type="text" placeholder="Type a message and press Enter…" />
-      <button id="send">Send</button>
+  <div class="hn-window" id="hnWindow" hidden>
+    <div class="hn-header">
+      <div>
+        HaulNationAI
+        <small>Smart Dispatch • Live Logistics</small>
+      </div>
+      <button class="hn-close" id="hnClose">Close</button>
     </div>
-  </aside>
 
-<script>
-  const el = s=>document.querySelector(s);
-  const chatHead=el('#chatHead'), chat=el('#chat'), messages=el('#messages');
-  const input=el('#text'), send=el('#send');
+    <div class="hn-messages" id="hnMsgs">
+      <div class="hn-row bot">
+        <div class="hn-bubble-msg">
+          Hey there! I’m your logistics helper. Ask about loads, lanes, rates, or tracking. 🚚
+        </div>
+      </div>
+    </div>
 
-  const add = (who, text) => {
-    const row = document.createElement('div');
-    row.className = 'row ' + who;
-    row.innerHTML = `<div class="bubble"><b>${who==='bot'?'Bot':'You'}:</b> ${text}</div>`;
-    messages.appendChild(row);
-    messages.scrollTop = messages.scrollHeight;
-  };
+    <div class="hn-inputbar">
+      <input id="hnInput" type="text" placeholder="Type a message and press Enter…" />
+      <button class="hn-send" id="hnSend">Send</button>
+    </div>
+  </div>
 
-  const reply = (t) => {
-    const q=t.toLowerCase();
-    if(/help|support/.test(q)) return "I can fetch loads, assign drivers, and track ETAs. Try: 'find loads near Dallas'.";
-    if(/price|cost|plan/.test(q)) return "Pricing is usage-based. Starter is free while we’re in beta.";
-    if(/hello|hi|hey/.test(q)) return "Hi there! 👋";
-    if(/about|project/.test(q)) return "We optimize routing, dispatch, and live tracking for carriers and brokers.";
-    return "Got it — I’ll note that. Ask me about loads, drivers, or ETAs.";
-  };
+  <script>
+    // Elements
+    const hnBubble = document.getElementById('hnBubble');
+    const hnWindow = document.getElementById('hnWindow');
+    const hnClose  = document.getElementById('hnClose');
+    const hnMsgs   = document.getElementById('hnMsgs');
+    const hnInput  = document.getElementById('hnInput');
+    const hnSend   = document.getElementById('hnSend');
 
-  const handleSend = () => {
-    const text = input.value.trim();
-    if(!text) return;
-    add('user', text);
-    input.value='';
-    setTimeout(()=>add('bot', reply(text)), 350);
-  };
+    // Open/close
+    hnBubble.addEventListener('click', () => {
+      hnWindow.hidden = false;
+      if (!sessionStorage.getItem('hnOpenSeen')) {
+        addBot("Online and ready to help with dispatching, quotes, and tracking.");
+        sessionStorage.setItem('hnOpenSeen','1');
+      }
+      setTimeout(()=>hnInput.focus(), 50);
+    });
+    hnClose.addEventListener('click', () => { hnWindow.hidden = true; });
 
-  chatHead.addEventListener('click', ()=> {
-    chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
-    if (chat.style.display === 'flex' && messages.childElementCount===0) {
-      add('bot',"Hey there! I’m your HaulNationAI helper 🤖. Try <i>about</i>, <i>help</i>, or <i>project</i>.");
+    // Message helpers
+    function addRow(role, text){
+      const row = document.createElement('div');
+      row.className = `hn-row ${role}`;
+      const bubble = document.createElement('div');
+      bubble.className = 'hn-bubble-msg';
+      bubble.textContent = text;
+      row.appendChild(bubble);
+      hnMsgs.appendChild(row);
+      hnMsgs.scrollTop = hnMsgs.scrollHeight;
     }
-  });
-  send.addEventListener('click', handleSend);
-  input.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); handleSend(); }});
-</script>
+    const addUser = t => addRow('user', t);
+    const addBot  = t => addRow('bot',  t);
+
+    // Lightweight rule replies (swap for API later)
+    function reply(text){
+      const t = text.toLowerCase();
+
+      if (/(track|where.*load|status|eta)/.test(t))
+        return "Drop the load ID or PRO # and I’ll fetch the latest status.";
+      if (/(rate|quote|pricing)/.test(t))
+        return "Tell me origin, destination, and weight/class (or equipment type) for a quick quote.";
+      if (/(lane|capacity|truck)/.test(t))
+        return "Which lane are you exploring? I can show recent capacity and average rates.";
+      if (/(dispatch|assign|driver)/.test(t))
+        return "Share pickup window, drop window, and equipment. I’ll prep an assignment.";
+      if (/(about|help|what.*you)/.test(t))
+        return "I’m HaulNationAI. I help with quoting, dispatch, tracking, and docs.";
+      return "Got it. Want a rate, tracking update, or dispatch setup?";
+    }
+
+    function handleSend(){
+      const text = hnInput.value.trim();
+      if (!text) return;
+      addUser(text);
+      hnInput.value = '';
+      setTimeout(()=> addBot(reply(text)), 300);
+    }
+
+    hnSend.addEventListener('click', handleSend);
+    hnInput.addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter'){ e.preventDefault(); handleSend(); }
+    });
+  </script>
 </body>
-</html>
+        </html>
