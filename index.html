@@ -1,223 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>HaulNationAI</title>
+  <meta name="description" content="Smart Dispatch • Real-time Logistics • AI Powered" />
 
+  <!-- ================= Colors / Theme ================= -->
   <style>
-    /* ====== Brand colors ====== */
     :root{
-      --blue:#226bff;
-      --green:#2e7d32;
-      --orange:#e67e22;
-      --brown:#7a3e16;
-      --ink:#1f2633;
-      --muted:#5b6477;
+      --brand-blue:#1976d2;     /* keep: blue */
+      --brand-teal:#16a085;     /* keep: teal  */
+      --brand-mint:#42b883;     /* accents for chips/badges */
+      --brand-brown:#7a3e12;    /* your footer band */
+      --bg:#f5f7fb;
+      --ink:#0f172a;
+      --muted:#64748b;
       --card:#ffffff;
-      --bg:#f4f7fb;
+      --line:rgba(15,23,42,.08);
+      --shadow:0 10px 30px rgba(2,6,23,.08);
+      --radius:18px;
     }
 
-    /* ====== Base layout (kept) ====== */
+    *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font:16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--ink); background:var(--bg);
+      margin:0;
+      font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:var(--bg);
     }
 
-    /* Header bar */
+    /* ================= Header ================= */
     header{
-      background: linear-gradient(95deg, var(--blue), var(--green));
-      color:#fff; padding:28px 16px;
-      box-shadow:0 8px 28px rgba(0,0,0,.15) inset;
+      background: linear-gradient(110deg, var(--brand-blue), var(--brand-teal));
+      color:#fff;
+      padding: clamp(28px, 6vw, 56px) 20px;
     }
-    header .shell{
-      max-width:1100px; margin:0 auto;
-      display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    .head{
+      max-width:1100px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:18px;
+      align-items:center;
     }
-    header h1{ margin:0; font-size:40px; font-weight:800; letter-spacing:.3px }
-    header p{ margin:0; font-weight:600; opacity:.92 }
-    header .tagline{ margin-top:6px; opacity:.95 }
+    .logo{
+      font-size: clamp(36px, 5.6vw, 64px);
+      font-weight:800;
+      letter-spacing:.3px;
+      margin:0;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      line-height:1.15;
+    }
+    .logo .emoji{
+      font-size: clamp(26px, 4.6vw, 40px);
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.18));
+    }
+    .strap{
+      grid-column:1 / -1;
+      font-weight:600;
+      opacity:.95;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .chip{
+      background: rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.35);
+      color:#fff;
+      padding:6px 12px;
+      border-radius:999px;
+      backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    }
 
-    /* Main card */
-    main{ padding:28px 16px }
+    /* ================= Welcome Card ================= */
+    .wrap{max-width:1100px; margin:0 auto; padding:22px;}
     .card{
-      max-width:1100px; margin:0 auto; background:var(--card); border-radius:18px;
-      box-shadow: 0 10px 36px rgba(16,24,40,.10), 0 2px 6px rgba(16,24,40,.06);
-      padding:26px 22px;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      border:1px solid var(--line);
+      padding: clamp(18px, 2.6vw, 28px);
     }
-    .card h2{ margin:0 0 10px 0; font-size:32px }
-    .card p{ margin:10px 0; color:var(--muted); font-size:18px }
+    .card h2{
+      font-size: clamp(28px, 4.2vw, 40px);
+      line-height:1.2;
+      margin:0 0 10px 0;
+      letter-spacing:.2px;
+    }
+    .lead{font-size: clamp(16px, 2.6vw, 20px); color:var(--muted);}
 
-    /* Footer */
+    /* ================= Footer ================= */
     footer{
-      margin-top:28px; background:var(--brown); color:#fff; text-align:center; padding:14px 10px;
+      margin-top:28px;
+      background:var(--brand-brown);
+      color:#fff;
+      padding:16px 20px;
+      text-align:center;
+      letter-spacing:.2px;
+      font-weight:600;
     }
 
-    /* ====== Floating chat (namespaced .hn-*) ====== */
-    .hn-bubble{
-      position:fixed; right:22px; bottom:24px; width:64px; height:64px; border-radius:50%;
-      background: conic-gradient(var(--green) 0 70%, var(--orange) 70% 100%);
-      box-shadow:0 10px 24px rgba(0,0,0,.2), inset 0 0 0 6px #fff;
-      display:grid; place-items:center; cursor:pointer; border:none;
-      transition: transform .15s ease; z-index:1000;
+    /* ================= Chat Bubble & Window ================= */
+    .tg-bubble{
+      position:fixed;
+      right:18px;
+      bottom:22px;
+      width:68px;height:68px;
+      border-radius:50%;
+      background:
+        conic-gradient(from 270deg,
+          #ffa54a 0 25%, /* peach sector */
+          #1f9d55 0 75%, /* team green sector */
+          #ffa54a 0 100%);
+      box-shadow:0 18px 40px rgba(2,6,23,.18);
+      border:3px solid #fff;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      z-index:30;
     }
-    .hn-bubble:active{ transform: scale(.96); }
-    .hn-bubble svg{ width:28px; height:28px; filter: drop-shadow(0 2px 2px rgba(0,0,0,.2)); }
+    .tg-bubble .dot{
+      width:30px;height:30px;border-radius:50%;
+      background:#fff; display:grid; place-items:center;
+      box-shadow:0 2px 10px rgba(2,6,23,.15) inset;
+      position:relative;
+    }
+    .tg-bubble .dot:before,
+    .tg-bubble .dot:after{
+      content:""; position:absolute; bottom:-3px; left:8px;
+      width:0;height:0;border:7px solid transparent;border-top-color:#fff; transform: rotate(25deg);
+    }
 
-    .hn-window{
-      position:fixed; right:22px; bottom:98px; width:min(92vw, 380px);
-      background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:16px;
-      box-shadow:0 12px 32px rgba(0,0,0,.18); z-index:1000; overflow:hidden;
+    .tg-win{
+      position:fixed;
+      right:16px;
+      bottom:100px;
+      width:min(690px, calc(100vw - 32px));
+      max-height:min(70vh, 720px);
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:0 30px 60px rgba(2,6,23,.24);
+      overflow:hidden;
+      display:none;
+      z-index:40;
     }
-    .hn-header{
-      padding:14px 16px; font-weight:800; color:#fff;
-      background: linear-gradient(90deg, var(--blue), var(--green));
+    .tg-head{
+      background:linear-gradient(110deg, var(--brand-blue), var(--brand-teal));
+      color:#fff;
+      padding:12px 14px;
       display:flex; align-items:center; justify-content:space-between;
     }
-    .hn-header small{ display:block; font-weight:600; opacity:.9 }
-    .hn-close{
-      border:none; background:rgba(255,255,255,.22); color:#fff; padding:6px 10px;
-      border-radius:8px; cursor:pointer;
+    .tg-title{
+      font-weight:800; letter-spacing:.2px;
+      display:flex; gap:10px; align-items:center;
     }
-    .hn-messages{ padding:14px; max-height:320px; overflow:auto; background:#f6f8fb; }
-    .hn-row{ display:flex; gap:10px; margin:10px 0; }
-    .hn-row.bot .hn-bubble-msg{ background:#e9f5ec; border-left:6px solid var(--green); }
-    .hn-row.user{ justify-content:flex-end; }
-    .hn-bubble-msg{
-      background:#eef2ff; padding:10px 12px; border-radius:12px; max-width:78%;
-      line-height:1.45; border:1px solid rgba(0,0,0,.08);
+    .tg-sub{font-weight:600; opacity:.85; font-size:14px}
+    .tg-close{
+      background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.5);
+      color:#fff; border-radius:999px; padding:6px 10px; cursor:pointer;
     }
-    .hn-inputbar{ display:flex; gap:10px; padding:12px; background:#fff; }
-    .hn-inputbar input{
-      flex:1; padding:12px; border:1px solid #d9dee8; border-radius:10px; outline:none;
+    .tg-body{padding:14px; background:#f8fafc; display:grid; grid-template-rows:1fr auto; gap:10px; height:420px}
+    .tg-stream{overflow:auto; display:flex; flex-direction:column; gap:10px}
+    .bubble{
+      padding:12px 14px; border-radius:14px; border:1px solid var(--line);
+      background:#fff; box-shadow:var(--shadow); max-width:90%;
     }
-    .hn-send{
-      background:var(--blue); color:#fff; border:none; padding:0 18px; border-radius:10px;
-      font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(34,107,255,.25);
+    .bot{background:#eefbf0; border-color:#cdebd6}
+    .me{margin-left:auto; background:#fff}
+    .tg-input{
+      display:flex; gap:8px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:8px;
+      box-shadow: var(--shadow)
+    }
+    .tg-input input{flex:1; font:inherit; border:0; outline:0; padding:10px}
+    .btn{
+      background:var(--brand-blue); color:#fff; border:0; padding:10px 16px;
+      border-radius:10px; font-weight:700; cursor:pointer;
+    }
+    .btn:active{transform:translateY(1px)}
+    @media (max-width:520px){
+      .tg-win{bottom:94px}
+      .strap{font-size:14px}
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== Header (kept) ====== -->
+  <!-- ================= Header ================= -->
   <header>
-    <div class="shell">
-      <div style="font-size:34px">🚚</div>
-      <div>
-        <h1>HaulNationAI</h1>
-        <p class="tagline">Smart Dispatch • Real-time Logistics • AI Powered</p>
+    <div class="head">
+      <h1 class="logo"><span class="emoji">🚚</span> HaulNationAI</h1>
+      <div class="strap">
+        <span class="chip">Smart Dispatch</span>
+        <span class="chip">Real-time Logistics</span>
+        <span class="chip">AI Powered</span>
       </div>
     </div>
   </header>
 
-  <!-- ====== Main welcome card (kept) ====== -->
-  <main>
-    <div class="card">
+  <!-- ================= Welcome ================= -->
+  <main class="wrap">
+    <section class="card">
       <h2>Welcome</h2>
-      <p>
-        Our AI helps you manage logistics smarter, faster, and cheaper.
-        Click the chat bubble to talk to us!
+      <p class="lead">
+        Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!
       </p>
-    </div>
+    </section>
   </main>
 
-  <!-- ====== Footer (kept) ====== -->
+  <!-- ================= Footer ================= -->
   <footer>© 2025 HaulNationAI</footer>
 
-  <!-- ====== Floating chat ====== -->
-  <button class="hn-bubble" id="hnBubble" aria-label="Open chat">
-    <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-      <path d="M2 12c0-4.97 4.48-9 10-9s10 4.03 10 9-4.48 9-10 9c-1.14 0-2.24-.17-3.27-.49L4 22l1.57-3.53A8.7 8.7 0 0 1 2 12z"/>
-    </svg>
+  <!-- ================= Chat Bubble ================= -->
+  <button class="tg-bubble" id="tgBubble" aria-label="Open chat">
+    <span class="dot"></span>
   </button>
 
-  <div class="hn-window" id="hnWindow" hidden>
-    <div class="hn-header">
+  <!-- ================= Chat Window ================= -->
+  <aside class="tg-win" id="tgWin" role="dialog" aria-label="HaulNationAI chat">
+    <div class="tg-head">
       <div>
-        HaulNationAI
-        <small>Smart Dispatch • Live Logistics</small>
+        <div class="tg-title">HaulNationAI</div>
+        <div class="tg-sub">Smart Dispatch • Live Logistics</div>
       </div>
-      <button class="hn-close" id="hnClose">Close</button>
+      <button class="tg-close" id="tgClose">Close</button>
     </div>
-
-    <div class="hn-messages" id="hnMsgs">
-      <div class="hn-row bot">
-        <div class="hn-bubble-msg">
-          Hey there! I’m your logistics helper. Ask about loads, lanes, rates, or tracking. 🚚
+    <div class="tg-body">
+      <div class="tg-stream" id="tgStream">
+        <div class="bubble bot">
+          Hey there! I’m your logistics helper. Ask about loads, lanes, rates, or tracking. 🚚📦
+        </div>
+        <div class="bubble bot">
+          Online and ready to help with dispatching, quotes, and tracking.
         </div>
       </div>
+      <form class="tg-input" id="tgForm">
+        <input id="tgInput" type="text" placeholder="Type a message and press Enter…" autocomplete="off" />
+        <button class="btn" type="submit">Send</button>
+      </form>
     </div>
+  </aside>
 
-    <div class="hn-inputbar">
-      <input id="hnInput" type="text" placeholder="Type a message and press Enter…" />
-      <button class="hn-send" id="hnSend">Send</button>
-    </div>
-  </div>
-
+  <!-- =========================================================
+       Team Green Bot – minimal client + skills loader
+       ========================================================= -->
   <script>
-    // Elements
-    const hnBubble = document.getElementById('hnBubble');
-    const hnWindow = document.getElementById('hnWindow');
-    const hnClose  = document.getElementById('hnClose');
-    const hnMsgs   = document.getElementById('hnMsgs');
-    const hnInput  = document.getElementById('hnInput');
-    const hnSend   = document.getElementById('hnSend');
+    // Global skills registry
+    window.TG_SKILLS = window.TG_SKILLS || [];
 
-    // Open/close
-    hnBubble.addEventListener('click', () => {
-      hnWindow.hidden = false;
-      if (!sessionStorage.getItem('hnOpenSeen')) {
-        addBot("Online and ready to help with dispatching, quotes, and tracking.");
-        sessionStorage.setItem('hnOpenSeen','1');
+    // Tiny client that asks each skill if it can handle the text.
+    const TeamGreen = {
+      respond(text){
+        const t = (text || "").trim();
+        for (const sk of window.TG_SKILLS){
+          try{
+            if (sk && typeof sk.canHandle === "function" && sk.canHandle(t)){
+              return (sk.handle && sk.handle(t)) || "";
+            }
+          }catch(e){ console.warn("skill error:", sk?.name, e); }
+        }
+        return "🤖 Sorry, I don’t know how to help with that yet. Try: **rate**, **tracking**, **dispatch**, **documents**, **coverage**, or **contact**.";
       }
-      setTimeout(()=>hnInput.focus(), 50);
-    });
-    hnClose.addEventListener('click', () => { hnWindow.hidden = true; });
+    };
 
-    // Message helpers
-    function addRow(role, text){
-      const row = document.createElement('div');
-      row.className = `hn-row ${role}`;
-      const bubble = document.createElement('div');
-      bubble.className = 'hn-bubble-msg';
-      bubble.textContent = text;
-      row.appendChild(bubble);
-      hnMsgs.appendChild(row);
-      hnMsgs.scrollTop = hnMsgs.scrollHeight;
-    }
-    const addUser = t => addRow('user', t);
-    const addBot  = t => addRow('bot',  t);
+    // Chat UI wiring
+    (function(){
+      const bubble = document.getElementById("tgBubble");
+      const win    = document.getElementById("tgWin");
+      const close  = document.getElementById("tgClose");
+      const form   = document.getElementById("tgForm");
+      const input  = document.getElementById("tgInput");
+      const feed   = document.getElementById("tgStream");
 
-    // Lightweight rule replies (swap for API later)
-    function reply(text){
-      const t = text.toLowerCase();
+      const add = (msg, who="bot")=>{
+        const div = document.createElement("div");
+        div.className = "bubble " + (who==="me" ? "me" : "bot");
+        div.innerHTML = msg;
+        feed.appendChild(div);
+        feed.scrollTop = feed.scrollHeight;
+      };
 
-      if (/(track|where.*load|status|eta)/.test(t))
-        return "Drop the load ID or PRO # and I’ll fetch the latest status.";
-      if (/(rate|quote|pricing)/.test(t))
-        return "Tell me origin, destination, and weight/class (or equipment type) for a quick quote.";
-      if (/(lane|capacity|truck)/.test(t))
-        return "Which lane are you exploring? I can show recent capacity and average rates.";
-      if (/(dispatch|assign|driver)/.test(t))
-        return "Share pickup window, drop window, and equipment. I’ll prep an assignment.";
-      if (/(about|help|what.*you)/.test(t))
-        return "I’m HaulNationAI. I help with quoting, dispatch, tracking, and docs.";
-      return "Got it. Want a rate, tracking update, or dispatch setup?";
-    }
+      bubble.addEventListener("click", ()=>{
+        win.style.display = "block";
+        input.focus();
+      });
+      close.addEventListener("click", ()=> win.style.display = "none");
 
-    function handleSend(){
-      const text = hnInput.value.trim();
-      if (!text) return;
-      addUser(text);
-      hnInput.value = '';
-      setTimeout(()=> addBot(reply(text)), 300);
-    }
+      // initial prompt hint
+      setTimeout(()=>add("Got it. Want a rate, tracking update, or dispatch setup?"), 400);
 
-    hnSend.addEventListener('click', handleSend);
-    hnInput.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter'){ e.preventDefault(); handleSend(); }
-    });
+      form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        const q = input.value.trim();
+        if(!q) return;
+        add(q, "me");
+        input.value = "";
+        setTimeout(()=> add( TeamGreen.respond(q) ), 180);
+      });
+    })();
   </script>
+
+  <!-- =========================================================
+       Load Team-green skills (client-side). Keep these URLs as-is.
+       Order doesn’t matter; add/remove skills freely.
+       ========================================================= -->
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/tracking.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/dispatch.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/documents.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/coverage.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/contacts.js"></script>
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
+
 </body>
-        </html>
+  </html>
