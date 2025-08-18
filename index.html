@@ -307,9 +307,14 @@
   </script>
 
   <!-- =========================================================
-       Load Team-green skills (client-side). Keep these URLs as-is.
-       Order doesn’t matter; add/remove skills freely.
+       Load Team-green skills (client-side).
+       Keep these URLs as-is; add/remove skills freely.
        ========================================================= -->
+
+  <!-- 1) Config (holds your Google Sheet endpoint) -->
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/config.js"></script>
+
+  <!-- 2) Core skills -->
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/tracking.js"></script>
@@ -317,7 +322,15 @@
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/documents.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/coverage.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/contacts.js"></script>
+
+  <!-- 3) New: lead capture -->
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/lead.js"></script>
+
+  <!-- 4) Optional: hello last (greets if user just says hi) -->
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
 
+  <!-- 5) Optional: local transcript logger (comment out if not needed) -->
+  <!-- <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/log.js"></script> -->
+
 </body>
-  </html>
+</html>
