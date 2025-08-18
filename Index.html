@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HaulNationAI • AI Logistics & Dispatch</title>
+<style>
+:root{
+  --blue:#1e3c72;        /* brand blue */
+  --blue-2:#2a5298;
+  --green:#2e7d32;       /* brand green */
+  --orange:#ff8c00;      /* brand orange */
+  --brown:#6b4f2a;       /* brand brown */
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --text:#1c1e21;
+  --muted:#64748b;
+  --ring:rgba(0,0,0,.12);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,var(--blue),var(--blue-2)) fixed;
+}
+.header{
+  padding:42px 20px 56px;
+  color:#fff;
+  text-align:center;
+  background:
+    radial-gradient(1200px 200px at 50% -40%,rgba(255,255,255,.18),transparent 60%);
+}
+.header h1{margin:0 0 8px;font-size:clamp(28px,5vw,40px);font-weight:800;letter-spacing:.2px}
+.header p{margin:0;color:#e6eefc}
+.badges{margin-top:10px;font-weight:600;opacity:.95}
+.badges span{margin:0 .35rem;padding:.25rem .5rem;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)}
+
+.wrap{max-width:960px;margin:-36px auto 56px;padding:0 16px}
+.card{
+  background:var(--card);
+  border-radius:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+  padding:20px;
+  border:1px solid var(--ring);
+}
+
+.chat{
+  display:grid;gap:14px;
+}
+.msg{display:flex;gap:12px;align-items:flex-start}
+.ball{
+  min-width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;color:#fff;font-weight:700;
+  box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+.ball.bot{background:linear-gradient(135deg,var(--green),#4caf50)}
+.ball.you{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+.bubble{
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px 14px;max-width:100%;
+}
+.bubble.bot{background:#eef8ef;border-color:#d7f0da}
+.inputRow{display:flex;gap:10px;margin-top:4px}
+.inputRow input{
+  flex:1;border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;font-size:16px;outline:none;
+}
+.inputRow input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.btn{
+  border:0;background:linear-gradient(135deg,#2563eb,#1e40af);color:#fff;
+  padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;
+  box-shadow:0 8px 18px rgba(30,64,175,.35);transition:transform .05s ease;
+}
+.btn:active{transform:translateY(1px)}
+.tip{color:var(--muted);font-size:14px;margin-top:6px}
+
+/* floating chat head + popover */
+.fab{
+  position:fixed;right:22px;bottom:22px;height:64px;width:64px;border-radius:50%;
+  background:conic-gradient(from 220deg,var(--orange),var(--brown),var(--green));
+  display:grid;place-items:center;color:#fff;font-weight:800;cursor:pointer;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);z-index:50;border:3px solid #fff;
+}
+.toast{
+  position:fixed;right:22px;bottom:98px;max-width:520px;z-index:60;
+  background:#fff;border:1px solid var(--ring);border-left:6px solid var(--green);
+  border-radius:14px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.22);display:none;
+}
+.toast h3{margin:0 0 8px;color:var(--green)}
+.toast p{margin:0 0 12px;color:#111}
+.toast .close{background:#eef2ff;border:0;padding:8px 14px;border-radius:10px;cursor:pointer}
+.footer{
+  color:#e6eefc;text-align:center;margin:28px 0 40px;font-size:14px
+}
+a{color:#ffcf91}
+</style>
+</head>
+<body>
+  <header class="header">
+    <h1>🚛 HaulNationAI</h1>
+    <p>AI-powered logistics & dispatch • real-time traffic, weather, and smart routing.</p>
+    <div class="badges">
+      <span>Blue</span><span>Green</span><span>Orange</span><span>Brown</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div id="chat" class="chat">
+        <div class="msg">
+          <div class="ball bot">AI</div>
+          <div class="bubble bot">Welcome to HaulNationAI. Ask about loads, routes, or fleet status 🚦</div>
+        </div>
+      </div>
+
+      <div class="inputRow">
+        <input id="in" type="text" placeholder="Type a message and press Enter…" />
+        <button id="send" class="btn">Send</button>
+      </div>
+      <div class="tip">Tip: try <b>routes</b>, <b>loads</b>, or <b>weather</b>.</div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">
+    <h3>HaulNationAI</h3>
+    <p>Online and ready — optimized by AI for speed, safety, and savings.</p>
+    <button class="close" id="closeToast">Close</button>
+  </div>
+  <button class="fab" id="fab">💬</button>
+
+  <p class="footer">© 2025 HaulNationAI • Built with sustainability in mind.</p>
+
+<script>
+const chat = document.getElementById('chat');
+const input = document.getElementById('in');
+const send = document.getElementById('send');
+const fab = document.getElementById('fab');
+const toast = document.getElementById('toast');
+const closeToast = document.getElementById('closeToast');
+
+function add(role, text){
+  const row = document.createElement('div'); row.className='msg';
+  const ball = document.createElement('div'); ball.className='ball '+(role==='you'?'you':'bot'); ball.textContent = role==='you'?'You':'AI';
+  const bub = document.createElement('div'); bub.className='bubble '+(role==='you'?'you':'bot'); bub.textContent = text;
+  row.appendChild(ball); row.appendChild(bub); chat.appendChild(row);
+  row.scrollIntoView({behavior:'smooth',block:'end'});
+}
+
+function reply(q){
+  const t = q.toLowerCase();
+  if(/route|eta|traffic/.test(t)) return "Routing engine: I can optimize lanes and ETAs with live traffic.";
+  if(/load|dispatch|broker/.test(t)) return "Dispatch: matching available tractors to priority loads.";
+  if(/weather|storm|snow|wind/.test(t)) return "Weather watch active: adjusting routes to avoid hazards.";
+  if(/price|fuel|cost|margin/.test(t)) return "Smart cost model: fuel, tolls, deadhead and detention factored.";
+  return "Got it! I’ll log that. Ask me about routes, loads, or weather.";
+}
+
+function handleSend(){
+  const text = input.value.trim(); if(!text) return;
+  add('you', text); input.value='';
+  setTimeout(()=> add('bot', reply(text)), 250);
+}
+send.addEventListener('click', handleSend);
+input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); handleSend(); }});
+
+fab.addEventListener('click',()=>{ toast.style.display='block'; });
+closeToast.addEventListener('click',()=>{ toast.style.display='none'; });
+</script>
+</body>
+</html>
