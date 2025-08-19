@@ -23,7 +23,7 @@
     html,body{height:100%}
     body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";color:var(--ink);background:var(--bg)}
 
-    /* Header (original gradient + chips) */
+    /* Header (original) */
     header{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:clamp(28px,6vw,56px) 20px}
     .head{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
     .logo{font-size:clamp(36px,5.6vw,64px);font-weight:800;letter-spacing:.3px;margin:0;display:flex;align-items:center;gap:14px;line-height:1.15}
@@ -31,27 +31,25 @@
     .strap{grid-column:1 / -1;font-weight:600;opacity:.95;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
     .chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 12px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 
-    /* Layout cards */
     .wrap{max-width:1100px;margin:0 auto;padding:22px}
     .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);padding:clamp(18px,2.6vw,28px)}
     .card h2{font-size:clamp(28px,4.2vw,40px);line-height:1.2;margin:0 0 10px 0;letter-spacing:.2px}
     .lead{font-size:clamp(16px,2.6vw,20px);color:var(--muted)}
 
-    /* Calculator card tweaks */
+    /* Calculator */
     .calc label{font-weight:700;display:block;margin:.5rem 0 .25rem}
-    .calc input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);font:inherit}
+    .calc input,.calc select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);font:inherit;background:#fff}
+    .row{display:grid;grid-template-columns:1fr 140px;gap:10px}
     .calc button{margin-top:10px;background:var(--brand-blue);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
     .calc button:active{transform:translateY(1px)}
     .result{margin-top:14px;padding:14px;border-radius:12px;background:#f6fbff;border:1px solid #d6e7ff}
 
-    /* Footer */
     footer{margin-top:28px;background:var(--brand-brown);color:#fff;padding:16px 20px;text-align:center;letter-spacing:.2px;font-weight:600}
 
-    /* Chat bubble & window (unchanged) */
+    /* Chat bubble & window */
     .tg-bubble{position:fixed;right:18px;bottom:22px;width:68px;height:68px;border-radius:50%;background:conic-gradient(from 270deg,#ffa54a 0 25%,#1f9d55 0 75%,#ffa54a 0 100%);box-shadow:0 18px 40px rgba(2,6,23,.18);border:3px solid #fff;display:grid;place-items:center;cursor:pointer;z-index:30}
     .tg-bubble .dot{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 10px rgba(2,6,23,.15) inset;position:relative}
     .tg-bubble .dot:before,.tg-bubble .dot:after{content:"";position:absolute;bottom:-3px;left:8px;width:0;height:0;border:7px solid transparent;border-top-color:#fff;transform:rotate(25deg)}
-
     .tg-win{position:fixed;right:16px;bottom:100px;width:min(690px,calc(100vw - 32px));max-height:min(70vh,720px);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px rgba(2,6,23,.24);overflow:hidden;display:none;z-index:40}
     .tg-head{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
     .tg-title{font-weight:800;letter-spacing:.2px;display:flex;gap:10px;align-items:center}
@@ -90,7 +88,7 @@
       </p>
     </section>
 
-    <!-- Calculator (reads PRICING from TG_CONFIG) -->
+    <!-- Calculator -->
     <section class="card calc" style="margin-top:16px;">
       <h2>Mileage & Price Calculator</h2>
 
@@ -100,8 +98,21 @@
       <label>Drop-off Location</label>
       <input id="destination" placeholder="e.g. New York, NY" />
 
-      <label>Weight (tons)</label>
-      <input id="weight" type="number" placeholder="e.g. 25" />
+      <label>Weight</label>
+      <div class="row">
+        <input id="weight" type="number" step="1" placeholder="e.g. 42000" />
+        <select id="weightUnit">
+          <option value="lbs" selected>Pounds (lbs)</option>
+          <option value="tons">Tons</option>
+        </select>
+      </div>
+
+      <label>Equipment</label>
+      <select id="equip">
+        <option value="van" selected>Dry Van</option>
+        <option value="reefer">Reefer</option>
+        <option value="flatbed">Flatbed</option>
+      </select>
 
       <button id="calcBtn">Calculate</button>
       <div id="result" class="result" style="display:none"></div>
@@ -134,7 +145,7 @@
     </div>
   </aside>
 
-  <!-- ================= Bot runtime ================= -->
+  <!-- Bot runtime -->
   <script>
     window.TG_SKILLS = window.TG_SKILLS || [];
 
@@ -187,7 +198,7 @@
     })();
   </script>
 
-  <!-- ===== Load unified config + skills ===== -->
+  <!-- Load config + skills -->
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/config.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
@@ -199,11 +210,12 @@
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/lead.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
 
-  <!-- ===== Calculator logic (uses same PRICING) ===== -->
+  <!-- Calculator logic (lbs/tons + equipment) -->
   <script>
     const $ = (id)=>document.getElementById(id);
     const P = (window.TG_CONFIG && window.TG_CONFIG.PRICING) || {
-      basePerMile:{van:2.00,reefer:2.40,flatbed:2.30}, fuelSurchargePerMile:0.35, perTonAdder:50, minimum:300
+      basePerMile:{van:2.00,reefer:2.40,flatbed:2.30},
+      fuelSurchargePerMile:0.35, perTonAdder:50, minimum:300
     };
 
     function usd(n){ return "$" + Math.round(n).toLocaleString(); }
@@ -238,7 +250,13 @@
     $("calcBtn").addEventListener("click", async ()=>{
       const origin = $("origin").value.trim();
       const dest   = $("destination").value.trim();
-      const tons   = parseFloat($("weight").value || "0") || 0;
+      const unit   = $("weightUnit").value;
+      const equip  = $("equip").value;
+
+      const raw = parseFloat($("weight").value || "0") || 0;
+      const tonsInput = unit === "lbs" ? raw/2000 : raw;     // convert lbs -> tons
+      const tonsCapped = Math.max(0, Math.min(tonsInput, 25)); // typical max ~25t
+      const capNote = (tonsInput !== tonsCapped) ? " (capped at 25t typical limit)" : "";
 
       const out = $("result");
       out.style.display = "block";
@@ -248,17 +266,20 @@
         const a = await geocode(origin);
         const b = await geocode(dest);
         const miles = await routeMiles(a,b);
-        const q = price(miles, tons);
+        const q = price(miles, tonsCapped, equip);
+
+        const minimumApplied = (q.total === Math.max(P.minimum||0, q.linehaul+q.fuel+q.weight) && q.total === (P.minimum||0));
 
         out.innerHTML = [
           `📍 <b>Lane:</b> ${a.label.split(",").slice(0,3).join(", ")} → ${b.label.split(",").slice(0,3).join(", ")}`,
-          "",
+          `• <b>Equipment:</b> ${equip}`,
           `• <b>Distance:</b> ${miles.toLocaleString()} mi`,
           `• <b>Linehaul</b> @ ${usd(q.base)}/mi: ${usd(q.linehaul)}`,
           `• <b>Fuel</b> @ ${usd(q.fsc)}/mi: ${usd(q.fuel)}`,
-          `• <b>Weight</b> @ ${usd(q.perT)}/t × ${tons.toFixed(1)}t: ${usd(q.weight)}`,
+          `• <b>Weight</b> @ ${usd(q.perT)}/t × ${tonsCapped.toFixed(1)}t: ${usd(q.weight)}${capNote}`,
+          minimumApplied ? `• <b>Minimum applied:</b> ${usd(P.minimum)}` : "",
           `<b>Total:</b> ${usd(q.total)}`
-        ].join("<br>");
+        ].filter(Boolean).join("<br>");
       }catch(e){
         console.warn(e);
         out.innerHTML = "❌ Error: Could not calculate route.";
@@ -266,4 +287,4 @@
     });
   </script>
 </body>
-  </html>
+          </html>
