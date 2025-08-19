@@ -1,283 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HaulNationAI</title>
-  <meta name="description" content="Smart Dispatch • Real-time Logistics • AI Powered" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HaulNationAI</title>
+<meta name="description" content="Smart Dispatch • Real-time Logistics • AI Powered" />
 
-  <style>
-    :root{
-      --brand-blue:#1976d2;
-      --brand-teal:#16a085;
-      --brand-brown:#7a3e12;
-      --bg:#f5f7fb; --ink:#0f172a; --muted:#64748b;
-      --card:#ffffff; --line:rgba(15,23,42,.08);
-      --shadow:0 10px 30px rgba(2,6,23,.08); --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";color:var(--ink);background:var(--bg)}
+<style>
+  :root{
+    --brand-blue:#1976d2; --brand-teal:#16a085; --brand-mint:#42b883; --brand-brown:#7a3e12;
+    --bg:#f5f7fb; --ink:#0f172a; --muted:#64748b; --card:#ffffff; --line:rgba(15,23,42,.08);
+    --shadow:0 10px 30px rgba(2,6,23,.08); --radius:18px;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:clamp(28px,6vw,56px) 20px}
+  .head{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+  .logo{font-size:clamp(36px,5.6vw,64px);font-weight:800;letter-spacing:.3px;margin:0;display:flex;align-items:center;gap:14px;line-height:1.15}
+  .logo .emoji{font-size:clamp(26px,4.6vw,40px);filter:drop-shadow(0 8px 14px rgba(0,0,0,.18))}
+  .strap{grid-column:1 / -1;font-weight:600;opacity:.95;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+  .chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 12px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 
-    /* Header (original look) */
-    header{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:clamp(28px,6vw,56px) 20px}
-    .head{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
-    .logo{font-size:clamp(36px,5.6vw,64px);font-weight:800;letter-spacing:.3px;margin:0;display:flex;align-items:center;gap:14px;line-height:1.15}
-    .logo .emoji{font-size:clamp(26px,4.6vw,40px);filter:drop-shadow(0 8px 14px rgba(0,0,0,.18))}
-    .strap{grid-column:1 / -1;font-weight:600;opacity:.95;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
-    .chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 12px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+  .wrap{max-width:1100px;margin:0 auto;padding:22px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);padding:clamp(18px,2.6vw,28px)}
+  .card h2{font-size:clamp(28px,4.2vw,40px);line-height:1.2;margin:0 0 10px 0;letter-spacing:.2px}
+  .lead{font-size:clamp(16px,2.6vw,20px);color:var(--muted)}
 
-    .wrap{max-width:1100px;margin:0 auto;padding:22px}
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);padding:clamp(18px,2.6vw,28px)}
-    .card h2{font-size:clamp(28px,4.2vw,40px);line-height:1.2;margin:0 0 10px 0;letter-spacing:.2px}
-    .lead{font-size:clamp(16px,2.6vw,20px);color:var(--muted)}
+  .section{margin-top:20px}
+  .label{font-weight:700;margin:8px 0 6px}
+  input,select,button{font:inherit}
+  .input, .select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .row{display:grid;grid-template-columns:1fr 180px;gap:10px}
+  .btn{background:var(--brand-blue);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .pill{background:#0ea5e9;color:#fff;border:0;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer}
+  .result{margin-top:16px;border:1px solid var(--line);background:#f8fafc;border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+  .ok{background:#ecfdf5;border-color:#bbf7d0}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#111827;color:#fff;padding:10px 14px;border-radius:999px;box-shadow:var(--shadow);z-index:60;opacity:.96}
 
-    /* Calculator */
-    .calc label{font-weight:700;display:block;margin:.5rem 0 .25rem}
-    .calc input,.calc select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);font:inherit;background:#fff}
-    .row{display:grid;grid-template-columns:1fr 140px;gap:10px}
-    .calc button{margin-top:10px;background:var(--brand-blue);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
-    .calc button:active{transform:translateY(1px)}
-    .result{margin-top:14px;padding:14px;border-radius:12px;background:#f6fbff;border:1px solid #d6e7ff}
-    .error{background:#fff5f5;border-color:#ffd2d2;color:#8b0000}
+  footer{margin-top:28px;background:var(--brand-brown);color:#fff;padding:16px 20px;text-align:center;letter-spacing:.2px;font-weight:600}
 
-    footer{margin-top:28px;background:var(--brand-brown);color:#fff;padding:16px 20px;text-align:center;letter-spacing:.2px;font-weight:600}
-
-    /* Chat bubble & window (unchanged) */
-    .tg-bubble{position:fixed;right:18px;bottom:22px;width:68px;height:68px;border-radius:50%;background:conic-gradient(from 270deg,#ffa54a 0 25%,#1f9d55 0 75%,#ffa54a 0 100%);box-shadow:0 18px 40px rgba(2,6,23,.18);border:3px solid #fff;display:grid;place-items:center;cursor:pointer;z-index:30}
-    .tg-bubble .dot{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 10px rgba(2,6,23,.15) inset;position:relative}
-    .tg-bubble .dot:before,.tg-bubble .dot:after{content:"";position:absolute;bottom:-3px;left:8px;width:0;height:0;border:7px solid transparent;border-top-color:#fff;transform:rotate(25deg)}
-    .tg-win{position:fixed;right:16px;bottom:100px;width:min(690px,calc(100vw - 32px));max-height:min(70vh,720px);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px rgba(2,6,23,.24);overflow:hidden;display:none;z-index:40}
-    .tg-head{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-    .tg-title{font-weight:800;letter-spacing:.2px;display:flex;gap:10px;align-items:center}
-    .tg-sub{font-weight:600;opacity:.85;font-size:14px}
-    .tg-close{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
-    .tg-body{padding:14px;background:#f8fafc;display:grid;grid-template-rows:1fr auto;gap:10px;height:420px}
-    .tg-stream{overflow:auto;display:flex;flex-direction:column;gap:10px}
-    .bubble{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);max-width:90%}
-    .bot{background:#eefbf0;border-color:#cdebd6}
-    .me{margin-left:auto;background:#fff}
-    .tg-input{display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}
-    .tg-input input{flex:1;font:inherit;border:0;outline:0;padding:10px}
-    .btn{background:var(--brand-blue);color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer}
-  </style>
+  .tg-bubble{position:fixed;right:18px;bottom:22px;width:68px;height:68px;border-radius:50%;background:conic-gradient(from 270deg,#ffa54a 0 25%,#1f9d55 0 75%,#ffa54a 0 100%);box-shadow:0 18px 40px rgba(2,6,23,.18);border:3px solid #fff;display:grid;place-items:center;cursor:pointer;z-index:30}
+  .tg-bubble .dot{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 10px rgba(2,6,23,.15) inset;position:relative}
+  .tg-bubble .dot:before{content:"";position:absolute;bottom:-3px;left:8px;width:0;height:0;border:7px solid transparent;border-top-color:#fff;transform:rotate(25deg)}
+  .tg-win{position:fixed;right:16px;bottom:100px;width:min(690px,calc(100vw - 32px));max-height:min(70vh,720px);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px rgba(2,6,23,.24);overflow:hidden;display:none;z-index:40}
+  .tg-head{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+  .tg-body{padding:14px;background:#f8fafc;display:grid;grid-template-rows:1fr auto;gap:10px;height:420px}
+  .tg-stream{overflow:auto;display:flex;flex-direction:column;gap:10px}
+  .bubble{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);max-width:90%}
+  .bot{background:#eefbf0;border-color:#cdebd6} .me{margin-left:auto;background:#fff}
+  .tg-input{display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}
+  .tg-input input{flex:1;border:0;outline:0;padding:10px}
+  @media (max-width:520px){.row{grid-template-columns:1fr}.tg-win{bottom:94px}.strap{font-size:14px}}
+</style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <div class="head">
-      <h1 class="logo"><span class="emoji">🚚</span> HaulNationAI</h1>
-      <div class="strap">
-        <span class="chip">Smart Dispatch</span>
-        <span class="chip">Real-time Logistics</span>
-        <span class="chip">AI Powered</span>
-      </div>
+<header>
+  <div class="head">
+    <h1 class="logo"><span class="emoji">🚚</span> HaulNationAI</h1>
+    <div class="strap">
+      <span class="chip">Smart Dispatch</span>
+      <span class="chip">Real-time Logistics</span>
+      <span class="chip">AI Powered</span>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- Main -->
-  <main class="wrap">
-    <section class="card">
-      <h2>Welcome</h2>
-      <p class="lead">
-        Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!
-      </p>
-    </section>
+<main class="wrap">
+  <section class="card">
+    <h2>Welcome</h2>
+    <p class="lead">Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!</p>
+  </section>
 
-    <!-- Calculator -->
-    <section class="card calc" style="margin-top:16px;">
-      <h2>Mileage & Price Calculator</h2>
+  <section class="card section">
+    <h2>Mileage &amp; Price Calculator</h2>
 
-      <label>Pickup Location</label>
-      <input id="origin" placeholder="e.g. Grand Rapids, MI" />
+    <div class="label">Pickup Location</div>
+    <input class="input" id="origin" placeholder="e.g. Grand Rapids, MI">
 
-      <label>Drop-off Location</label>
-      <input id="destination" placeholder="e.g. New York, NY" />
+    <div class="label">Drop-off Location</div>
+    <input class="input" id="destination" placeholder="e.g. New York, NY">
 
-      <label>Weight</label>
-      <div class="row">
-        <input id="weight" type="number" step="1" placeholder="e.g. 42000" />
-        <select id="weightUnit">
-          <option value="lbs" selected>Pounds (lbs)</option>
-          <option value="tons">Tons</option>
-        </select>
-      </div>
-
-      <label>Equipment</label>
-      <select id="equip">
-        <option value="van" selected>Dry Van</option>
-        <option value="reefer">Reefer</option>
-        <option value="flatbed">Flatbed</option>
+    <div class="label">Weight</div>
+    <div class="row">
+      <input class="input" id="weightVal" type="number" placeholder="e.g. 6000">
+      <select class="select" id="weightUnit">
+        <option value="lbs" selected>Pounds (lbs)</option>
+        <option value="tons">Tons</option>
       </select>
-
-      <button id="calcBtn">Calculate</button>
-      <div id="result" class="result" style="display:none"></div>
-    </section>
-  </main>
-
-  <footer>© 2025 HaulNationAI</footer>
-
-  <!-- Chat bubble -->
-  <button class="tg-bubble" id="tgBubble" aria-label="Open chat"><span class="dot"></span></button>
-
-  <!-- Chat window -->
-  <aside class="tg-win" id="tgWin" role="dialog" aria-label="HaulNationAI chat">
-    <div class="tg-head">
-      <div>
-        <div class="tg-title">HaulNationAI</div>
-        <div class="tg-sub">Smart Dispatch • Live Logistics</div>
-      </div>
-      <button class="tg-close" id="tgClose">Close</button>
     </div>
-    <div class="tg-body">
-      <div class="tg-stream" id="tgStream">
-        <div class="bubble bot">Hey there! I’m your logistics helper. Ask about loads, lanes, rates, or tracking. 🚚📦</div>
-        <div class="bubble bot">Online and ready to help with dispatching, quotes, and tracking.</div>
-      </div>
-      <form class="tg-input" id="tgForm">
-        <input id="tgInput" type="text" placeholder="Type a message and press Enter…" autocomplete="off" />
-        <button class="btn" type="submit">Send</button>
-      </form>
-    </div>
-  </aside>
 
-  <!-- Bot runtime -->
-  <script>
-    window.TG_SKILLS = window.TG_SKILLS || [];
-    const TeamGreen = {
-      async respond(text){
-        const t = (text || "").trim();
-        for (const sk of window.TG_SKILLS){
-          try{
-            if (sk && typeof sk.canHandle === "function" && sk.canHandle(t)){
-              const out = sk.handle && sk.handle(t);
-              return (out && typeof out.then === "function") ? await out : out;
-            }
-          }catch(e){ console.warn("skill error:", sk?.name, e); }
-        }
-        return "🤖 Sorry, I don’t know how to help with that yet. Try: <b>rate</b>, <b>tracking</b>, <b>dispatch</b>, <b>documents</b>, <b>coverage</b>, or <b>contact</b>.";
-      }
-    };
-    (function(){
-      const b = document.getElementById("tgBubble");
-      const w = document.getElementById("tgWin");
-      const c = document.getElementById("tgClose");
-      const f = document.getElementById("tgForm");
-      const i = document.getElementById("tgInput");
-      const s = document.getElementById("tgStream");
-      const add = (msg, who="bot")=>{
-        const d = document.createElement("div");
-        d.className = "bubble " + (who==="me" ? "me" : "bot");
-        d.innerHTML = msg; s.appendChild(d); s.scrollTop = s.scrollHeight; return d;
+    <div class="label">Equipment</div>
+    <select class="select" id="equipment">
+      <option value="van" selected>Van</option>
+      <option value="reefer">Reefer</option>
+      <option value="flatbed">Flatbed</option>
+    </select>
+
+    <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+      <button class="btn" id="calcBtn">Calculate</button>
+      <button class="pill" id="saveBtn" disabled>Save Quote</button>
+    </div>
+
+    <div id="result" class="result" style="display:none"></div>
+  </section>
+</main>
+
+<footer>© 2025 HaulNationAI</footer>
+
+<button class="tg-bubble" id="tgBubble" aria-label="Open chat"><span class="dot"></span></button>
+
+<aside class="tg-win" id="tgWin" role="dialog" aria-label="HaulNationAI chat">
+  <div class="tg-head">
+    <div>
+      <div style="font-weight:800">HaulNationAI</div>
+      <div style="font-weight:600;opacity:.85;font-size:14px">Smart Dispatch • Live Logistics</div>
+    </div>
+    <button class="pill" id="tgClose">Close</button>
+  </div>
+  <div class="tg-body">
+    <div class="tg-stream" id="tgStream">
+      <div class="bubble bot">Hey there! I’m your logistics helper. Ask about loads, lanes, rates, or tracking. 🚚📦</div>
+      <div class="bubble bot">Online and ready to help with dispatching, quotes, and tracking.</div>
+    </div>
+    <form class="tg-input" id="tgForm">
+      <input id="tgInput" type="text" placeholder="Type a message and press Enter…" autocomplete="off" />
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+</aside>
+
+<!-- config (for SHEET_WEBHOOK if/when you add it) -->
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/config.js"></script>
+
+<script>
+  // ---------- Pricing constants (keep in sync with chat) ----------
+  const PRICING = {
+    basePerMile: { van: 2.00, reefer: 2.00, flatbed: 2.00 }, // keep $2/mi for now
+    fuelSurchargePerMile: 0.35,  // set to 0 if you prefer
+    perTonAdder: 50,
+    minimum: 250
+  };
+
+  // ---------- Nominatim Geocode + OSRM miles ----------
+  async function geocode(place){
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(place)}`;
+    const r = await fetch(url, { headers:{'Accept':'application/json'} });
+    const d = await r.json();
+    if (!d || !d[0]) throw new Error('geocode_fail');
+    return { lat: +d[0].lat, lon: +d[0].lon, label: d[0].display_name };
+  }
+  async function milesBetween(a,b){
+    const url = `https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=false&alternatives=false&steps=false`;
+    const r = await fetch(url);
+    const d = await r.json();
+    if (!d || d.code !== 'Ok' || !d.routes || !d.routes[0]) throw new Error('route_fail');
+    return Math.max(1, Math.round(d.routes[0].distance / 1609.344));
+  }
+
+  // ---------- Pricing ----------
+  function quote(miles, tons, equipment='van'){
+    const base = PRICING.basePerMile[equipment] ?? PRICING.basePerMile.van;
+    const linehaul = miles * base;
+    const fuel = miles * (PRICING.fuelSurchargePerMile || 0);
+    const weightAdj = Math.max(0, tons) * (PRICING.perTonAdder || 0);
+    const total = Math.max(PRICING.minimum || 0, linehaul + fuel + weightAdj);
+    return { linehaul, fuel, weightAdj, total, base };
+  }
+  function fmt(n){ return `$${Math.round(n).toLocaleString()}`; }
+
+  // ---------- UI wiring ----------
+  const $ = sel => document.querySelector(sel);
+  const result = $('#result');
+  const saveBtn = $('#saveBtn');
+  let lastRecord = null;
+
+  $('#calcBtn').addEventListener('click', async ()=>{
+    saveBtn.disabled = true;
+    result.style.display = 'block';
+    result.classList.remove('ok');
+    result.innerHTML = '… calculating …';
+
+    const origin = $('#origin').value.trim();
+    const destination = $('#destination').value.trim();
+    const unit = $('#weightUnit').value;
+    const weightIn = parseFloat($('#weightVal').value || '0');
+    const equip = $('#equipment').value;
+
+    if (!origin || !destination){
+      result.innerHTML = '⚠️ Please enter both pickup and drop-off.';
+      return;
+    }
+
+    try{
+      const [a,b] = await Promise.all([geocode(origin), geocode(destination)]);
+      const miles = await milesBetween(a,b);
+
+      // weight conversion
+      const tons = unit === 'lbs' ? (weightIn / 2000) : weightIn;
+
+      const q = quote(miles, tons, equip);
+      const html = [
+        `<div style="margin-bottom:8px"><b>📍 Lane:</b> ${a.label} → ${b.label}</div>`,
+        `<ul style="margin:0;padding-left:1.1em;line-height:1.6">`,
+        `<li><b>Equipment:</b> ${equip}</li>`,
+        `<li><b>Distance:</b> ${miles.toLocaleString()} mi</li>`,
+        `<li><b>Linehaul @ ${fmt(q.base)}/mi:</b> ${fmt(q.linehaul)}</li>`,
+        `<li><b>Fuel @ ${fmt(PRICING.fuelSurchargePerMile)}/mi:</b> ${fmt(q.fuel)}</li>`,
+        `<li><b>Weight @ ${fmt(PRICING.perTonAdder)}/t × ${tons.toFixed(1)}t:</b> ${fmt(q.weightAdj)}</li>`,
+        `</ul>`,
+        `<div style="margin-top:8px"><b>Total:</b> ${fmt(q.total)}</div>`
+      ].join('');
+      result.innerHTML = html;
+      result.classList.add('ok');
+
+      lastRecord = {
+        timestamp: new Date().toISOString(),
+        origin, destination,
+        origin_label: a.label, destination_label: b.label,
+        miles, equipment: equip,
+        weight_input: weightIn, weight_unit: unit, weight_tons: +tons.toFixed(3),
+        linehaul: Math.round(q.linehaul), fuel: Math.round(q.fuel),
+        weight_adj: Math.round(q.weightAdj), total: Math.round(q.total),
+        source: 'calculator'
       };
-      b.addEventListener("click", ()=>{ w.style.display="block"; i.focus(); });
-      c.addEventListener("click", ()=> w.style.display="none");
-      setTimeout(()=>add("Got it. Want a rate, tracking update, or dispatch setup?"), 400);
-      f.addEventListener("submit", async (e)=>{
-        e.preventDefault();
-        const q = i.value.trim(); if(!q) return;
-        add(q,"me"); i.value="";
-        const t = add("… calculating …");
-        const r = await TeamGreen.respond(q);
-        t.innerHTML = r || "I’m not sure yet—try saying <b>rate</b> with origin and destination.";
-      });
-    })();
-  </script>
+      saveBtn.disabled = false;
 
-  <!-- Load config + skills -->
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/config.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/tracking.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/dispatch.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/documents.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/coverage.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/contacts.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/lead.js"></script>
-  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
+    }catch(err){
+      console.warn(err);
+      result.classList.remove('ok');
+      result.innerHTML = '❌ Error: Could not calculate route.';
+      lastRecord = null;
+    }
+  });
 
-  <!-- Calculator logic with clear validation + OSRM -->
-  <script>
-    const $ = id=>document.getElementById(id);
-    const PRICING = (window.TG_CONFIG && window.TG_CONFIG.PRICING) || {
-      basePerMile:{van:2.00,reefer:2.40,flatbed:2.30},
-      fuelSurchargePerMile:0.35, perTonAdder:50, minimum:300
+  // Save to Google Sheet webhook if configured; else to localStorage
+  saveBtn.addEventListener('click', async ()=>{
+    if (!lastRecord) return;
+
+    const toast = (msg)=> {
+      const t = document.createElement('div');
+      t.className = 'toast'; t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(()=> t.remove(), 2200);
     };
-    const usd = n => "$" + Math.round(n).toLocaleString();
 
-    async function geocode(place){
-      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(place)}`;
-      const res = await fetch(url);
-      const j = await res.json();
-      if(!j.length) throw new Error("GEOCODE_FAIL");
-      return { lon: parseFloat(j[0].lon), lat: parseFloat(j[0].lat), label: j[0].display_name };
-    }
-    async function routeMiles(a,b){
-      const url = `https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=false&steps=false`;
-      const res = await fetch(url);
-      const j = await res.json();
-      const m = j && j.routes && j.routes[0] && j.routes[0].distance;
-      if(!m) throw new Error("ROUTE_FAIL");
-      return Math.max(1, Math.round(m/1609.344));
-    }
-    function quote(miles, tons, equip){
-      const base = PRICING.basePerMile[equip] ?? PRICING.basePerMile.van;
-      const fsc  = PRICING.fuelSurchargePerMile || 0;
-      const perT = PRICING.perTonAdder || 0;
-      const linehaul = miles * base;
-      const fuel     = miles * fsc;
-      const weight   = Math.max(0, tons) * perT;
-      const total    = Math.max(PRICING.minimum || 0, linehaul + fuel + weight);
-      return {base,fsc,perT,linehaul,fuel,weight,total};
-    }
-
-    $("calcBtn").addEventListener("click", async ()=>{
-      const origin = $("origin").value.trim();
-      const dest   = $("destination").value.trim();
-      const unit   = $("weightUnit").value;
-      const equip  = $("equip").value;
-      const out    = $("result");
-      out.style.display = "block"; out.classList.remove("error");
-
-      if(!origin || !dest){
-        out.classList.add("error");
-        out.innerHTML = "⚠️ Please enter both pickup and drop-off (include state abbreviations, e.g., <b>Grand Rapids, MI</b>).";
-        return;
+    const hook = (window.TG_CONFIG && window.TG_CONFIG.SHEET_WEBHOOK) || '';
+    try{
+      if (hook){
+        await fetch(hook, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(lastRecord)
+        });
+        toast('✅ Quote saved to Sheet');
+      }else{
+        const key = 'haulnation_quotes';
+        const arr = JSON.parse(localStorage.getItem(key) || '[]');
+        arr.push(lastRecord);
+        localStorage.setItem(key, JSON.stringify(arr));
+        toast('💾 Saved locally (add SHEET_WEBHOOK later)');
       }
+    }catch(e){
+      console.warn(e);
+      toast('⚠️ Save failed');
+    }
+  });
 
-      // weight: lbs -> tons, clamp to 25t
-      const raw = parseFloat($("weight").value || "0") || 0;
-      const tonsInput = unit === "lbs" ? raw/2000 : raw;
-      const tons = Math.max(0, Math.min(tonsInput, 25));
-      const capNote = (tons !== tonsInput) ? " (capped at ~25t truck limit)" : "";
-
-      out.innerHTML = "⏳ Calculating…";
-
-      try{
-        const a = await geocode(origin);
-        const b = await geocode(dest);
-        const miles = await routeMiles(a,b);
-        const q = quote(miles, tons, equip);
-
-        out.innerHTML = [
-          `📍 <b>Lane:</b> ${a.label.split(",").slice(0,3).join(", ")} → ${b.label.split(",").slice(0,3).join(", ")}`,
-          `• <b>Equipment:</b> ${equip}`,
-          `• <b>Distance:</b> ${miles.toLocaleString()} mi`,
-          `• <b>Linehaul</b> @ ${usd(q.base)}/mi: ${usd(q.linehaul)}`,
-          `• <b>Fuel</b> @ ${usd(q.fsc)}/mi: ${usd(q.fuel)}`,
-          `• <b>Weight</b> @ ${usd(q.perT)}/t × ${tons.toFixed(1)}t: ${usd(q.weight)}${capNote}`,
-          `<b>Total:</b> ${usd(q.total)}`
-        ].join("<br>");
-      }catch(err){
-        out.classList.add("error");
-        const msg = (err && err.message === "GEOCODE_FAIL")
-          ? "❌ I couldn’t find that location. Try adding the state (e.g., <b>Gary, IN</b>)."
-          : "❌ Error: Could not calculate route. Try different city spellings or add state abbreviations.";
-        out.innerHTML = msg;
-        console.warn(err);
+  // ----- Chat minimal client (unchanged) -----
+  window.TG_SKILLS = window.TG_SKILLS || [];
+  const TeamGreen = {
+    async respond(text){
+      const t=(text||"").trim();
+      for (const sk of window.TG_SKILLS){
+        try{
+          if (sk && typeof sk.canHandle==="function" && sk.canHandle(t)){
+            const out = sk.handle && sk.handle(t);
+            return (out && typeof out.then==="function") ? await out : out;
+          }
+        }catch(e){ console.warn("skill error:", sk?.name, e); }
       }
+      return "🤖 Sorry, I don’t know how to help with that yet. Try: <b>rate</b>, <b>tracking</b>, <b>dispatch</b>, <b>documents</b>, <b>coverage</b>, or <b>contact</b>.";
+    }
+  };
+  (function(){
+    const bubble=$('#tgBubble'), win=$('#tgWin'), close=$('#tgClose');
+    const form=$('#tgForm'), input=$('#tgInput'), feed=$('#tgStream');
+    const add=(msg,who='bot')=>{ const d=document.createElement('div'); d.className='bubble '+(who==='me'?'me':'bot'); d.innerHTML=msg; feed.appendChild(d); feed.scrollTop=feed.scrollHeight; return d; };
+    bubble.addEventListener('click', ()=>{win.style.display='block'; input.focus()});
+    close.addEventListener('click', ()=> win.style.display='none');
+    setTimeout(()=>add("Got it. Want a rate, tracking update, or dispatch setup?"), 400);
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault(); const q=input.value.trim(); if(!q) return; add(q,'me'); input.value='';
+      const thinking = add('… calculating …'); const reply = await TeamGreen.respond(q);
+      thinking.innerHTML = reply || "I’m not sure yet—try saying <b>rate</b> with origin and destination.";
     });
-  </script>
+  })();
+</script>
+
+<!-- Team-green skills (must stay) -->
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/tracking.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/dispatch.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/documents.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/coverage.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/contacts.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/lead.js"></script>
+<script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
 </body>
-    </html>
+        </html>
