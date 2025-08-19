@@ -10,7 +10,6 @@
     :root{
       --brand-blue:#1976d2;
       --brand-teal:#16a085;
-      --brand-mint:#42b883;
       --brand-brown:#7a3e12;
       --bg:#f5f7fb;
       --ink:#0f172a;
@@ -22,9 +21,9 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans;color:var(--ink);background:var(--bg)}
+    body{margin:0;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";color:var(--ink);background:var(--bg)}
 
-    /* Header */
+    /* Header (original gradient + chips) */
     header{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:clamp(28px,6vw,56px) 20px}
     .head{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
     .logo{font-size:clamp(36px,5.6vw,64px);font-weight:800;letter-spacing:.3px;margin:0;display:flex;align-items:center;gap:14px;line-height:1.15}
@@ -32,34 +31,30 @@
     .strap{grid-column:1 / -1;font-weight:600;opacity:.95;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
     .chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 12px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 
-    /* Layout & cards */
+    /* Layout cards */
     .wrap{max-width:1100px;margin:0 auto;padding:22px}
-    .grid{display:grid;grid-template-columns:1fr;gap:20px}
-    @media (min-width:900px){.grid{grid-template-columns:1fr 1fr}}
     .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);padding:clamp(18px,2.6vw,28px)}
     .card h2{font-size:clamp(28px,4.2vw,40px);line-height:1.2;margin:0 0 10px 0;letter-spacing:.2px}
     .lead{font-size:clamp(16px,2.6vw,20px);color:var(--muted)}
 
-    /* Calculator form */
-    .form-row{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-    label{font-weight:700}
-    input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);font:inherit}
-    .btn{background:var(--brand-blue);color:#fff;border:0;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer}
-    .btn:active{transform:translateY(1px)}
-    #calcOut{margin-top:12px;padding:10px;border-radius:10px;background:#f8fafc;border:1px solid var(--line)}
+    /* Calculator card tweaks */
+    .calc label{font-weight:700;display:block;margin:.5rem 0 .25rem}
+    .calc input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);font:inherit}
+    .calc button{margin-top:10px;background:var(--brand-blue);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
+    .calc button:active{transform:translateY(1px)}
+    .result{margin-top:14px;padding:14px;border-radius:12px;background:#f6fbff;border:1px solid #d6e7ff}
 
     /* Footer */
     footer{margin-top:28px;background:var(--brand-brown);color:#fff;padding:16px 20px;text-align:center;letter-spacing:.2px;font-weight:600}
 
-    /* Chat bubble + window (unchanged look) */
-    .tg-bubble{position:fixed;right:18px;bottom:22px;width:68px;height:68px;border-radius:50%;
-      background:conic-gradient(from 270deg,#ffa54a 0 25%,#1f9d55 0 75%,#ffa54a 0 100%);
-      box-shadow:0 18px 40px rgba(2,6,23,.18);border:3px solid #fff;display:grid;place-items:center;cursor:pointer;z-index:30}
+    /* Chat bubble & window (unchanged) */
+    .tg-bubble{position:fixed;right:18px;bottom:22px;width:68px;height:68px;border-radius:50%;background:conic-gradient(from 270deg,#ffa54a 0 25%,#1f9d55 0 75%,#ffa54a 0 100%);box-shadow:0 18px 40px rgba(2,6,23,.18);border:3px solid #fff;display:grid;place-items:center;cursor:pointer;z-index:30}
     .tg-bubble .dot{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 2px 10px rgba(2,6,23,.15) inset;position:relative}
-    .tg-bubble .dot:before{content:"";position:absolute;bottom:-3px;left:8px;width:0;height:0;border:7px solid transparent;border-top-color:#fff;transform:rotate(25deg)}
+    .tg-bubble .dot:before,.tg-bubble .dot:after{content:"";position:absolute;bottom:-3px;left:8px;width:0;height:0;border:7px solid transparent;border-top-color:#fff;transform:rotate(25deg)}
+
     .tg-win{position:fixed;right:16px;bottom:100px;width:min(690px,calc(100vw - 32px));max-height:min(70vh,720px);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 60px rgba(2,6,23,.24);overflow:hidden;display:none;z-index:40}
     .tg-head{background:linear-gradient(110deg,var(--brand-blue),var(--brand-teal));color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-    .tg-title{font-weight:800;letter-spacing:.2px}
+    .tg-title{font-weight:800;letter-spacing:.2px;display:flex;gap:10px;align-items:center}
     .tg-sub{font-weight:600;opacity:.85;font-size:14px}
     .tg-close{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:6px 10px;cursor:pointer}
     .tg-body{padding:14px;background:#f8fafc;display:grid;grid-template-rows:1fr auto;gap:10px;height:420px}
@@ -69,7 +64,7 @@
     .me{margin-left:auto;background:#fff}
     .tg-input{display:flex;gap:8px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}
     .tg-input input{flex:1;font:inherit;border:0;outline:0;padding:10px}
-    @media (max-width:520px){.tg-win{bottom:94px}.strap{font-size:14px}}
+    .btn{background:var(--brand-blue);color:#fff;border:0;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer}
   </style>
 </head>
 <body>
@@ -88,38 +83,31 @@
 
   <!-- Main -->
   <main class="wrap">
-    <div class="grid">
-      <section class="card">
-        <h2>Welcome</h2>
-        <p class="lead">Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!</p>
-      </section>
+    <section class="card">
+      <h2>Welcome</h2>
+      <p class="lead">
+        Our AI helps you manage logistics smarter, faster, and cheaper. Click the chat bubble to talk to us!
+      </p>
+    </section>
 
-      <!-- No-key Mileage & Price Calculator -->
-      <section class="card">
-        <h2>Mileage & Price Calculator</h2>
+    <!-- Calculator (reads PRICING from TG_CONFIG) -->
+    <section class="card calc" style="margin-top:16px;">
+      <h2>Mileage & Price Calculator</h2>
 
-        <div class="form-row">
-          <label for="orig">Pickup Location</label>
-          <input id="orig" placeholder="e.g. Grand Rapids, MI">
-        </div>
+      <label>Pickup Location</label>
+      <input id="origin" placeholder="e.g. Grand Rapids, MI" />
 
-        <div class="form-row">
-          <label for="dest">Drop-off Location</label>
-          <input id="dest" placeholder="e.g. Newark, NJ">
-        </div>
+      <label>Drop-off Location</label>
+      <input id="destination" placeholder="e.g. New York, NY" />
 
-        <div class="form-row">
-          <label for="tons">Weight (tons)</label>
-          <input id="tons" type="number" step="0.1" placeholder="e.g. 20.5">
-        </div>
+      <label>Weight (tons)</label>
+      <input id="weight" type="number" placeholder="e.g. 25" />
 
-        <button class="btn" id="calcBtn">Calculate</button>
-        <div id="calcOut"></div>
-      </section>
-    </div>
+      <button id="calcBtn">Calculate</button>
+      <div id="result" class="result" style="display:none"></div>
+    </section>
   </main>
 
-  <!-- Footer -->
   <footer>© 2025 HaulNationAI</footer>
 
   <!-- Chat bubble -->
@@ -146,9 +134,10 @@
     </div>
   </aside>
 
-  <!-- Bot runner (async-aware) -->
+  <!-- ================= Bot runtime ================= -->
   <script>
     window.TG_SKILLS = window.TG_SKILLS || [];
+
     const TeamGreen = {
       async respond(text){
         const t = (text || "").trim();
@@ -163,6 +152,7 @@
         return "🤖 Sorry, I don’t know how to help with that yet. Try: <b>rate</b>, <b>tracking</b>, <b>dispatch</b>, <b>documents</b>, <b>coverage</b>, or <b>contact</b>.";
       }
     };
+
     (function(){
       const bubble = document.getElementById("tgBubble");
       const win    = document.getElementById("tgWin");
@@ -190,73 +180,15 @@
         if(!q) return;
         add(q, "me");
         input.value = "";
-        const thinking = add("…calculating…");
+        const thinking = add("… calculating …");
         const reply = await TeamGreen.respond(q);
         thinking.innerHTML = reply || "I’m not sure yet—try saying <b>rate</b> with origin and destination.";
       });
     })();
   </script>
 
-  <!-- ===== No-key Calculator logic: Nominatim + OSRM ===== -->
-  <script>
-    const NOMINATIM = "https://nominatim.openstreetmap.org/search";
-    const OSRM = "https://router.project-osrm.org/route/v1/driving";
-
-    async function geocode(place){
-      const url = `${NOMINATIM}?format=json&q=${encodeURIComponent(place)}&limit=1`;
-      const r = await fetch(url);
-      if(!r.ok) throw new Error("geocode");
-      const j = await r.json();
-      if(!j || !j[0]) throw new Error("no result");
-      return { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon), name: j[0].display_name };
-    }
-    async function routeMiles(a,b){
-      const url = `${OSRM}/${a.lon},${a.lat};${b.lon},${b.lat}?overview=false&alternatives=false&steps=false`;
-      const r = await fetch(url);
-      if(!r.ok) throw new Error("route");
-      const j = await r.json();
-      if(!j || !j.routes || !j.routes[0]) throw new Error("no route");
-      return Math.max(1, Math.round((j.routes[0].distance||0)/1609.344));
-    }
-    function usd(n){ return `$${Math.round(n).toLocaleString()}`; }
-
-    function priceBreakdown(miles, tons=0, equipment="van"){
-      const P = { basePerMile:{van:2.25,reefer:2.65,flatbed:2.55}, fuel:0.35, perTon:50, min:250 };
-      const base = P.basePerMile[equipment] || P.basePerMile.van;
-      const linehaul = miles*base;
-      const fuel = miles*P.fuel;
-      const weight = Math.max(0, tons)*P.perTon;
-      const total = Math.max(P.min, linehaul+fuel+weight);
-      return [
-        `• Distance: <b>${miles.toLocaleString()}</b> mi`,
-        `• Linehaul @ ${usd(base)}/mi: ${usd(linehaul)}`,
-        `• Fuel @ ${usd(P.fuel)}/mi: ${usd(fuel)}`,
-        `• Weight @ ${usd(P.perTon)}/t × ${Number(tons||0).toFixed(1)}t: ${usd(weight)}`,
-        `<b>Total:</b> ${usd(total)}`
-      ].join("<br>");
-    }
-
-    document.getElementById("calcBtn").addEventListener("click", async ()=>{
-      const out = document.getElementById("calcOut");
-      const a = document.getElementById("orig").value.trim();
-      const b = document.getElementById("dest").value.trim();
-      const t = parseFloat(document.getElementById("tons").value)||0;
-
-      if(!a || !b){ out.innerHTML = "⚠️ Please enter both pickup and drop-off (use City, ST)."; return; }
-      out.innerHTML = "⏳ Calculating route…";
-
-      try{
-        const [A,B] = await Promise.all([geocode(a), geocode(b)]);
-        const miles = await routeMiles(A,B);
-        out.innerHTML = `📍 <b>Lane:</b> ${A.name} → ${B.name}<br><br>${priceBreakdown(miles,t)}`;
-      }catch(e){
-        console.warn(e);
-        out.innerHTML = "❌ Error: Could not calculate route. Try adding state abbreviations (e.g., MI, NJ) or ZIPs.";
-      }
-    });
-  </script>
-
-  <!-- ===== Load Team-green skills (the bot) ===== -->
+  <!-- ===== Load unified config + skills ===== -->
+  <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/config.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/help.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/quote.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/tracking.js"></script>
@@ -266,5 +198,72 @@
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/contacts.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/lead.js"></script>
   <script src="https://jgreendesign23-cpu.github.io/Team-green/skills/hello.js"></script>
+
+  <!-- ===== Calculator logic (uses same PRICING) ===== -->
+  <script>
+    const $ = (id)=>document.getElementById(id);
+    const P = (window.TG_CONFIG && window.TG_CONFIG.PRICING) || {
+      basePerMile:{van:2.00,reefer:2.40,flatbed:2.30}, fuelSurchargePerMile:0.35, perTonAdder:50, minimum:300
+    };
+
+    function usd(n){ return "$" + Math.round(n).toLocaleString(); }
+
+    async function geocode(place){
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(place)}`;
+      const res = await fetch(url);
+      const j = await res.json();
+      if(!j.length) throw new Error("no geocode");
+      return { lon: parseFloat(j[0].lon), lat: parseFloat(j[0].lat), label: j[0].display_name };
+    }
+    async function routeMiles(a,b){
+      const url = `https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=false&steps=false`;
+      const res = await fetch(url);
+      const j = await res.json();
+      const m = j && j.routes && j.routes[0] && j.routes[0].distance;
+      if(!m) throw new Error("no route");
+      return Math.max(1, Math.round(m/1609.344));
+    }
+
+    function price(miles, tons, equipment='van'){
+      const base = P.basePerMile[equipment] ?? P.basePerMile.van;
+      const fsc  = P.fuelSurchargePerMile || 0;
+      const perT = P.perTonAdder || 0;
+      const linehaul = miles * base;
+      const fuel     = miles * fsc;
+      const weight   = Math.max(0, tons) * perT;
+      const total    = Math.max(P.minimum || 0, linehaul + fuel + weight);
+      return {base,fsc,perT,linehaul,fuel,weight,total};
+    }
+
+    $("calcBtn").addEventListener("click", async ()=>{
+      const origin = $("origin").value.trim();
+      const dest   = $("destination").value.trim();
+      const tons   = parseFloat($("weight").value || "0") || 0;
+
+      const out = $("result");
+      out.style.display = "block";
+      out.innerHTML = "⏳ Calculating…";
+
+      try{
+        const a = await geocode(origin);
+        const b = await geocode(dest);
+        const miles = await routeMiles(a,b);
+        const q = price(miles, tons);
+
+        out.innerHTML = [
+          `📍 <b>Lane:</b> ${a.label.split(",").slice(0,3).join(", ")} → ${b.label.split(",").slice(0,3).join(", ")}`,
+          "",
+          `• <b>Distance:</b> ${miles.toLocaleString()} mi`,
+          `• <b>Linehaul</b> @ ${usd(q.base)}/mi: ${usd(q.linehaul)}`,
+          `• <b>Fuel</b> @ ${usd(q.fsc)}/mi: ${usd(q.fuel)}`,
+          `• <b>Weight</b> @ ${usd(q.perT)}/t × ${tons.toFixed(1)}t: ${usd(q.weight)}`,
+          `<b>Total:</b> ${usd(q.total)}`
+        ].join("<br>");
+      }catch(e){
+        console.warn(e);
+        out.innerHTML = "❌ Error: Could not calculate route.";
+      }
+    });
+  </script>
 </body>
   </html>
