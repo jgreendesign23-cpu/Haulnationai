@@ -67,6 +67,9 @@
     <div id="result"></div>
   </div>
 
+  <!-- Config script (with your API key) -->
+  <script src="skills/config.js"></script>
+
   <script>
     async function calculate() {
       const origin = document.getElementById('origin').value;
@@ -79,12 +82,14 @@
         return;
       }
 
-      const apiKey = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6ImY3YWMxMGE5Y2QzMzRhNmY5ZTZjYmI2ZDVjNDdjYjc5IiwiaCI6Im11cm11cjY0In0="; // <--- paste your key here
+      const apiKey = window.TG_CONFIG?.ORS_KEY; // pulls from config.js
 
       try {
-        // Use OpenRouteService Geocode to get coordinates
+        // Geocode
         const geocode = async (place) => {
-          let resp = await fetch(`https://api.openrouteservice.org/geocode/search?api_key=${apiKey}&text=${encodeURIComponent(place)}`);
+          let resp = await fetch(
+            `https://api.openrouteservice.org/geocode/search?api_key=${apiKey}&text=${encodeURIComponent(place)}`
+          );
           let data = await resp.json();
           return data.features[0].geometry.coordinates;
         };
@@ -92,7 +97,7 @@
         const [startLng, startLat] = await geocode(origin);
         const [endLng, endLat] = await geocode(destination);
 
-        // Get route distance
+        // Route distance
         let routeResp = await fetch("https://api.openrouteservice.org/v2/directions/driving-car", {
           method: "POST",
           headers: {
@@ -108,7 +113,7 @@
         let distanceMeters = routeData.routes[0].summary.distance;
         let distanceMiles = (distanceMeters / 1609.34).toFixed(1);
 
-        // Simple pricing formula
+        // Simple price formula
         let baseRate = 2.5; // $2.50 per mile
         let weightFactor = weight ? parseFloat(weight) : 1;
         let price = (distanceMiles * baseRate * weightFactor).toFixed(2);
